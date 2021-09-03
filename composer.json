@@ -1,0 +1,22 @@
+{
+  "name": "vocolboy/promptpay-generator",
+  "autoload": {
+    "psr-4": {
+      "Vocolboy\\PromptpayGenerator\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "vocolboy",
+      "email": "vocolboy@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^8.0"
+  },
+  "license": "MIT",
+  "require-dev": {
+    "pestphp/pest": "^1.18"
+  }
+}
