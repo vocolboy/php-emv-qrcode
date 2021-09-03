@@ -1,5 +1,9 @@
 {
   "name": "vocolboy/promptpay-generator",
+  "description": "PromptPay generate for PHP",
+  "keywords": [
+    "Promptpay"
+  ],
   "autoload": {
     "psr-4": {
       "Vocolboy\\PromptpayGenerator\\": "src/"
