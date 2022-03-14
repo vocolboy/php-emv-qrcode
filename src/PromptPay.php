@@ -30,7 +30,7 @@ class PromptPay
         ];
 
         if ($amount) {
-            $data[] = PromptPayLib::calculateString("54", number_format($amount, 2));
+            $data[] = PromptPayLib::calculateString("54", number_format($amount, 2,'.',''));
         }
 
         $crc16 = CRC16::xmodem(PromptPayLib::serialize($data).'6304', 65535);
