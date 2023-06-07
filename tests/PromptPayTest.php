@@ -21,3 +21,15 @@ test('generate with amount 100', function () {
 test('generate with amount 1002.11', function () {
     expect(PromptPay::generate('0912345678', 1002.11))->toEqual('00020101021229370016A000000677010111011300669123456785802TH530376454071002.1163043F0C');
 });
+
+test('format Promptpay id', function () {
+    expect(PromptPay::formatPromptpayId('0912345678'))->toEqual('0066912345678');
+});
+
+test('format Promptpay id case 2', function () {
+    expect(PromptPay::formatPromptpayId('1234567890123'))->toEqual('1234567890123');
+});
+
+test('format Promptpay id case 3', function () {
+    expect(PromptPay::formatPromptpayId('091-234-5678'))->toEqual('0066912345678');
+});

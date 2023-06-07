@@ -4,11 +4,6 @@ namespace Vocolboy\PromptpayGenerator;
 
 class PromptPay
 {
-    /**
-     * @param string $promptpayId
-     * @param float|null $amount
-     * @return string
-     */
     public static function generate(string $promptpayId, ?float $amount = 0): string
     {
         $promptpayIdLength = strlen($promptpayId);
@@ -19,24 +14,33 @@ class PromptPay
         };
 
         $data = [
-            PromptPayLib::calculateString('00', '01'),
-            PromptPayLib::calculateString('01', $amount ? '12' : '11'),
-            PromptPayLib::calculateString('29', PromptPayLib::serialize([
-                PromptPayLib::calculateString('00', 'A000000677010111'),
-                PromptPayLib::calculateString($promptpayIdCode, PromptPayLib::formatPromptpayId($promptpayId)),
-            ])),
-            PromptPayLib::calculateString("58", "TH"),
-            PromptPayLib::calculateString("53", "764"),
+            EMV::calculateString('00', '01'),
+            EMV::calculateString('01', $amount ? '12' : '11'),
+            EMV::calculateString(
+                '29',
+                EMV::serialize([
+                    EMV::calculateString('00', 'A000000677010111'),
+                    EMV::calculateString($promptpayIdCode, self::formatPromptpayId($promptpayId)),
+                ])
+            ),
+            EMV::calculateString("58", "TH"),
+            EMV::calculateString("53", "764"),
         ];
 
         if ($amount) {
-            $data[] = PromptPayLib::calculateString("54", number_format($amount, 2,'.',''));
+            $data[] = EMV::calculateString("54", number_format($amount, 2, '.', ''));
         }
 
-        $crc16 = CRC16::xmodem(PromptPayLib::serialize($data).'6304', 65535);
-        $crc16 = str_pad(strtoupper(dechex($crc16)), 4, '0', STR_PAD_LEFT);
-        $data[] = PromptPayLib::calculateString(63, $crc16);
+        $data[] = EMV::calculateString(63, EMV::crc16($data));
 
-        return PromptPayLib::serialize($data);
+        return EMV::serialize($data);
+    }
+
+    public static function formatPromptpayId(string $promptpayId): string
+    {
+        $promptpayId = preg_replace('/[^0-9]/', '', $promptpayId);
+        $zeroPadPromptpayId = str_pad(preg_replace('/^0/', '66', $promptpayId), 13, '0', STR_PAD_LEFT);
+
+        return strlen($promptpayId) > 13 ? $promptpayId : $zeroPadPromptpayId;
     }
 }
