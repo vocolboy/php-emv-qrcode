@@ -1,4 +1,4 @@
-# promptpay-generator
+# php-emv-qrcode
 
 # Introduction
 Support QRCode generator
