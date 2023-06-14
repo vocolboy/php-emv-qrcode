@@ -1,8 +1,11 @@
 {
-  "name": "vocolboy/promptpay-generator",
-  "description": "PromptPay generate for PHP",
+  "name": "vocolboy/php-emv-qrcode",
+  "description": "Generate PromptPay/TrueMoney/VietQR/PayMaya QRCode",
   "keywords": [
-    "Promptpay"
+    "Promptpay",
+    "TrueMoney",
+    "VietQR",
+    "PayMaya"
   ],
   "autoload": {
     "psr-4": {
@@ -22,5 +25,10 @@
   "license": "MIT",
   "require-dev": {
     "pestphp/pest": "^1.18"
+  },
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
   }
 }
