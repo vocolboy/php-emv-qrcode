@@ -1,4 +1,4 @@
-# php-emv-qrcode
+# php-emv-qrcode ![Packagist Downloads](https://img.shields.io/packagist/dt/vocolboy/php-emv-qrcode)
 
 # Introduction
 Support QRCode generator
