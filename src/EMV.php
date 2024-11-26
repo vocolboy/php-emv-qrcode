@@ -6,10 +6,12 @@ class EMV
 {
 
     // EMV QR Code Tag 描述對應表
+    // 資料來源: W3C (https://www.w3.org/2020/Talks/emvco-qr-20201021.pdf)
     private static array $tagDescriptions = [
         '00' => '格式指標',
         '01' => '啟動方式',
-        '38' => '附加數據字段模板',
+        '02' => '商戶帳號信息',
+        '52' => '商戶類別碼',
         '53' => '交易貨幣',
         '54' => '交易金額',
         '58' => '國家代碼',
