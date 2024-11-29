@@ -25,7 +25,10 @@ class GCashLib
             ),
             EMV::calculateString('52', '6016'),
             EMV::calculateString('53', '608'),
-            $amount ? EMV::calculateString('54', number_format($amount, 2, '.', '')) : null,
+            EMV::when(
+                $amount,
+                fn() => EMV::calculateString('54', number_format($amount, 2, '.', ''))
+            ),
             EMV::calculateString('58', 'PH'),
             EMV::calculateString('59', $payeeName),
             EMV::calculateString('60', $location),

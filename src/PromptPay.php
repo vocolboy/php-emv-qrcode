@@ -25,11 +25,11 @@ class PromptPay
             ),
             EMV::calculateString("58", "TH"),
             EMV::calculateString("53", "764"),
+            EMV::when(
+                $amount,
+                fn() => EMV::calculateString("54", number_format($amount, 2, '.', ''))
+            ),
         ];
-
-        if ($amount) {
-            $data[] = EMV::calculateString("54", number_format($amount, 2, '.', ''));
-        }
 
         $data[] = EMV::calculateString(63, EMV::crc16($data));
 

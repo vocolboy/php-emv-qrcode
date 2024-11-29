@@ -25,11 +25,17 @@ class PayMayaLib
             ),
             EMV::calculateString('52', '6016'),
             EMV::calculateString('53', '608'),
-            $amount ? EMV::calculateString('54', number_format($amount, 2, '.', '')) : null,
+            EMV::when(
+                $amount,
+                fn() => EMV::calculateString('54', number_format($amount, 2, '.', ''))
+            ),
             EMV::calculateString('58', 'PH'),
             EMV::calculateString('59', $payeeName),
             EMV::calculateString('60', 'Valenzuela'),
-            $memo ? EMV::calculateString('62', EMV::serialize([EMV::calculateString('08', $memo)])) : null
+            EMV::when(
+                $memo,
+                fn() => EMV::calculateString('62', EMV::serialize([EMV::calculateString('08', $memo)]))
+            ),
         ];
 
         $data[] = EMV::calculateString(63, EMV::crc16($data));

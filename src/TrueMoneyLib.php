@@ -12,10 +12,16 @@ class TrueMoneyLib
             EMV::calculateString('00', '01'),
             EMV::calculateString('01', $amount ? '12' : '11'),
             EMV::calculateString('29', self::calculatePromptPayIdData($trueMoneyId)),
-            $amount ? EMV::calculateString('54', number_format($amount, 2, '.', '')) : null,
+            EMV::when(
+                $amount,
+                fn() => EMV::calculateString('54', number_format($amount, 2, '.', ''))
+            ),
             EMV::calculateString('58', 'TH'),
             EMV::calculateString('53', '764'),
-            $memo ? EMV::calculateString('81', self::generateMemo($memo)) : null,
+            EMV::when(
+                $memo,
+                fn() => EMV::calculateString('81', self::generateMemo($memo))
+            ),
         ];
 
         $data[] = EMV::calculateString(63, EMV::crc16($data));
