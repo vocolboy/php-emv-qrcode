@@ -15,6 +15,16 @@ test('serialize', function () {
     expect(EMV::serialize(['a', 'b', 'c']))->toEqual('abc');
 });
 
+test('when function true', function () {
+    $amount = 1000;
+    expect(EMV::when($amount, fn() => EMV::calculateString('54', $amount)))->toEqual('54041000');
+});
+
+test('when function false', function () {
+    $amount = null;
+    expect(EMV::when($amount, fn() => EMV::calculateString('54', $amount)))->toEqual(null);
+});
+
 test('decode', function () {
     expect(
         EMV::decode(
@@ -44,7 +54,8 @@ test('decode', function () {
 
 test('generate php by qrcode', function () {
     expect(
-        EMV::generatePHPDataByQRCode("00020101021238630010A00000072701330006970422011997042292087067309020208QRIBFTTC530370454061000005802VN621502118432917204163047793"
+        EMV::generatePHPDataByQRCode(
+            "00020101021238630010A00000072701330006970422011997042292087067309020208QRIBFTTC530370454061000005802VN621502118432917204163047793"
         )
     )->toEqual(
         "\$data = [
