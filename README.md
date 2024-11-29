@@ -52,5 +52,5 @@ $data[] = EMV::calculateString('63', EMV::crc16($data));"
 ./vendor/bin/pest
 
 #docker
-docker run -it --rm -v $(pwd):/root -w /root sineverba/php8xc:1.7.0 composer install
+docker run -it --rm -v $(pwd):/root -w /root sineverba/php8xc:1.7.0 composer install && vendor/bin/pest
 ```
