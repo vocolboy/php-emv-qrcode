@@ -65,6 +65,65 @@ class EMV
         return ($int_id >= 26 && $int_id <= 51) || $int_id == 62;
     }
 
+    public static function replaceOrAddValues(string $dataString, array $fieldsToAddOrReplace): string
+    {
+        $decodedData = self::decode($dataString);
+
+        unset($decodedData['63']);
+
+        foreach ($fieldsToAddOrReplace as $id => $value) {
+            if ($id === '63') {
+                continue;
+            }
+
+            $decodedData[$id] = $value;
+        }
+
+        $reconstructedFields = [];
+        ksort($decodedData);
+        foreach ($decodedData as $currentId => $currentValue) {
+            if (is_array($currentValue)) {
+                $nestedSerialized = self::serializeNestedArray($currentValue);
+                $reconstructedFields[] = self::calculateString($currentId, $nestedSerialized);
+            } else {
+                $reconstructedFields[] = self::calculateString($currentId, (string)$currentValue);
+            }
+        }
+
+        usort($reconstructedFields, function ($a, $b) {
+            $idA = substr($a, 0, 2);
+            $idB = substr($b, 0, 2);
+            return intval($idA) <=> intval($idB);
+        });
+
+        $newCrc = self::crc16($reconstructedFields);
+
+        $reconstructedFields[] = self::calculateString('63', $newCrc);
+
+        return self::serialize($reconstructedFields);
+    }
+
+    private static function serializeNestedArray(array $nestedData): string
+    {
+        $nestedParts = [];
+        foreach ($nestedData as $nestedId => $nestedValue) {
+            if (is_array($nestedValue)) {
+                $deepNestedSerialized = self::serializeNestedArray($nestedValue);
+                $nestedParts[] = self::calculateString($nestedId, $deepNestedSerialized);
+            } else {
+                $nestedParts[] = self::calculateString($nestedId, (string)$nestedValue);
+            }
+        }
+
+        usort($nestedParts, function ($a, $b) {
+            $idA = substr($a, 0, 2);
+            $idB = substr($b, 0, 2);
+            return intval($idA) <=> intval($idB);
+        });
+
+        return self::serialize($nestedParts);
+    }
+
     public static function generatePHPDataByQRCode(string $data): string
     {
         $struct = self::decode($data);

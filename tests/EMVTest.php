@@ -84,3 +84,30 @@ test('generate php by qrcode', function () {
 \$data[] = EMV::calculateString('63', EMV::crc16(\$data));\n"
     );
 });
+
+test('replace or add multiple values', function () {
+    expect(
+        EMV::replaceOrAddValues(
+            "00020101021128500011ph.ppmi.p2m0111PAPHPHM1XXX030920143184005033105204539953036085802PH5916Jverlin Contrano6004Naic62440014com.paymaya.qr0522RCjLbs2j7swGVvnBuZGXtL63049320",
+            [
+                '01' => '12',
+                '54' => '100.00'
+            ]
+        )
+    )->toEqual(
+        "00020101021228500011ph.ppmi.p2m0111PAPHPHM1XXX030920143184005033105204539953036085406100.005802PH5916Jverlin Contrano6004Naic62440014com.paymaya.qr0522RCjLbs2j7swGVvnBuZGXtL63040430"
+    );
+});
+
+test('replace or add multiple values 2', function () {
+    expect(
+        EMV::replaceOrAddValues(
+            "00020101021228500011ph.ppmi.p2m0111PAPHPHM1XXX030920144830105030115204539953036085406122.995802PH5908314620916005Pasig62440014com.paymaya.qr0522TZ2qmKifcHwxgiNrwXXm8L6304A531",
+            [
+                '54' => '101.00'
+            ]
+        )
+    )->dd()->toEqual(
+        "00020101021228500011ph.ppmi.p2m0111PAPHPHM1XXX030920144830105030115204539953036085406101.005802PH5908314620916005Pasig62440014com.paymaya.qr0522TZ2qmKifcHwxgiNrwXXm8L6304EF75"
+    );
+});
