@@ -41,6 +41,6 @@ class PromptPay
         $promptpayId = preg_replace('/[^0-9]/', '', $promptpayId);
         $zeroPadPromptpayId = str_pad(preg_replace('/^0/', '66', $promptpayId), 13, '0', STR_PAD_LEFT);
 
-        return strlen($promptpayId) > 13 ? $promptpayId : $zeroPadPromptpayId;
+        return strlen($promptpayId) >= 13 ? $promptpayId : $zeroPadPromptpayId;
     }
 }

@@ -33,3 +33,11 @@ test('format Promptpay id case 2', function () {
 test('format Promptpay id case 3', function () {
     expect(PromptPay::formatPromptpayId('091-234-5678'))->toEqual('0066912345678');
 });
+
+test('format Promptpay id case 4', function () {
+    expect(PromptPay::formatPromptpayId('0105538083844'))->toEqual('0105538083844');
+});
+
+test('generate with business id and amount 100', function () {
+    expect(PromptPay::generate('0105538083844', 100.00))->toEqual('00020101021229370016A000000677010111021301055380838445802TH53037645406100.0063041060');
+});
